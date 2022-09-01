@@ -7,7 +7,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -22,36 +21,27 @@ func isInReleaseMode() bool {
 
 func DbInstace() *mongo.Client {
 
-	envs, err := godotenv.Read(".env")
+	URL, ok := os.LookupEnv("MONGO_URL")
+	if !ok {
+		panic("URL not found")
+	}
+	client, err := mongo.NewClient(options.Client().ApplyURI(URL))
 	if err != nil {
-		log.Fatal("no .env")
+		log.Fatal(err)
 	}
-	var mongoUrl string
-	if isInReleaseMode() {
-		mongoUrl = envs["MONGO_REALEASE_URL"]
-	} else {
-		mongoUrl = envs["MONGO_URL"]
-	}
-	if mongoUrl == "" {
-		panic("Credentials not found")
-	}
-	client, error := mongo.NewClient(options.Client().ApplyURI(mongoUrl))
-	if error != nil {
-		log.Fatal(error)
-	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	err = client.Connect(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Println("Db Connected")
 	return client
 }
 
-var Client *mongo.Client = DbInstace()
-
-func OpenCollection(client *mongo.Client, collenctionName string) *mongo.Collection {
-	collection := client.Database("Cluster0").Collection(collenctionName)
+func OpenCollection(client *mongo.Client, dbName, collenctionName string) *mongo.Collection {
+	collection := client.Database(dbName).Collection(collenctionName)
 	return collection
 }

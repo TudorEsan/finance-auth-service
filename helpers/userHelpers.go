@@ -1,30 +1,14 @@
 package helpers
 
 import (
-	"App/models"
-	"context"
+	"auth-service/models"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
-
-func GetUser(userId string) (models.User, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*20)
-	var user models.User
-	defer cancel()
-	id, err := primitive.ObjectIDFromHex(userId)
-	if err != nil {
-		return models.User{}, err
-	}
-	err = userCollection.FindOne(ctx, bson.M{"_id": id}).Decode(&user)
-	if err != nil {
-		return models.User{}, err
-	}
-	return user, nil
-}
 
 func GetUserFromContext(c *gin.Context) (user models.User, err error) {
 	userAny, exists := c.Get("user")
@@ -38,4 +22,16 @@ func GetUserFromContext(c *gin.Context) (user models.User, err error) {
 		return
 	}
 	return
+}
+
+func GetUserForDb(user models.User) (models.User, error) {
+	user.CreateDate, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+	user.ID = primitive.NewObjectID()
+	fmt.Println(user.ID)
+	hashedPassw, err := HashPassword(*user.Password)
+	if err != nil {
+		return models.User{}, err
+	}
+	*user.Password = hashedPassw
+	return user, nil
 }

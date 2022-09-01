@@ -1,10 +1,19 @@
 package routes
 
 import (
-	"go.mongodb.org/mongo-driver/"
+	"auth-service/controller"
+	"auth-service/database"
+
+	"github.com/gin-gonic/gin"
+	"github.com/hashicorp/go-hclog"
 )
 
 func AuthRoutes(incomingRoutes *gin.RouterGroup) {
-	incomingRoutes.POST("/signup", controller.Signup())
-	incomingRoutes.POST("/login", controller.Login())
+	l := hclog.New(&hclog.LoggerOptions{
+		Name: "AUTH",
+	})
+	db := database.DbInstace()
+	controller := controller.NewAuthController(l, db)
+	incomingRoutes.POST("/signup", controller.SignupHandler())
+	incomingRoutes.POST("/login", controller.LoginHandler())
 }
