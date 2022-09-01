@@ -16,7 +16,6 @@ type SignedDetails struct {
 	jwt.StandardClaims
 }
 
-var SECRET_KEY []byte = getSecretKey()
 
 func GenerateTokens(user models.User) (string, string, error) {
 	claims := &SignedDetails{
@@ -36,11 +35,11 @@ func GenerateTokens(user models.User) (string, string, error) {
 		},
 	}
 
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(SECRET_KEY)
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(getSecretKey())
 	if err != nil {
 		return "", "", err
 	}
-	refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims).SignedString(SECRET_KEY)
+	refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims).SignedString(getSecretKey())
 	if err != nil {
 		return "", "", err
 	}

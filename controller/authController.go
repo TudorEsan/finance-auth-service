@@ -45,7 +45,8 @@ func (controller *AuthController) SignupHandler() gin.HandlerFunc {
 		defer cancel()
 		var user models.User
 		if err := c.BindJSON(&user); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			controller.l.Error("Could not bind", err)
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error(), "body": c.Request.Body})
 			return
 		}
 		// check if username is not present in the database
@@ -90,7 +91,6 @@ func (controller *AuthController) LoginHandler() gin.HandlerFunc {
 		defer cancel()
 		var user models.UserLoginForm
 		var foundUser models.User
-
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 			return
