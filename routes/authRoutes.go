@@ -11,4 +11,6 @@ func AuthRoutes(incomingRoutes *gin.RouterGroup, l hclog.Logger, client *mongo.C
 	controller := controller.NewAuthController(l, client)
 	incomingRoutes.POST("/signup", controller.SignupHandler())
 	incomingRoutes.POST("/login", controller.LoginHandler())
+	incomingRoutes.POST("/refresh", controller.RefreshTokensHandler())
+
 }

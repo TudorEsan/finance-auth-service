@@ -6,6 +6,8 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/hashicorp/go-hclog v1.3.0
+	github.com/stretchr/testify v1.8.0
+	github.com/tryvium-travels/memongo v0.7.0
 	go.mongodb.org/mongo-driver v1.10.1
 	golang.org/x/crypto v0.0.0-20220829220503-c86fa9a7ed90
 )
@@ -13,7 +15,8 @@ require (
 require (
 	github.com/ONSdigital/dp-mongodb-in-memory v1.3.1 // indirect
 	github.com/ONSdigital/log.go/v2 v2.0.9 // indirect
-	github.com/acobaugh/osrelease v0.0.0-20181218015638-a93a0a55a249 // indirect
+	github.com/TudorEsan/shared-finance-app-golang v1.0.6 // indirect
+	github.com/acobaugh/osrelease v0.1.0 // indirect
 	github.com/benweissmann/memongo v0.1.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
@@ -36,10 +39,8 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/spf13/afero v1.8.2 // indirect
-	github.com/stretchr/testify v1.8.0 // indirect
+	github.com/spf13/afero v1.9.2 // indirect
 	github.com/strikesecurity/strikememongo v0.2.4 // indirect
-	github.com/tryvium-travels/memongo v0.7.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.1 // indirect

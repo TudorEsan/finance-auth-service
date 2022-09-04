@@ -11,6 +11,8 @@ import (
 func main() {
 	// dependencies
 	r := gin.Default()
+	
+	
 	gr := r.Group("")
 	l := hclog.New(&hclog.LoggerOptions{
 		Name: "AUTH",

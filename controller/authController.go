@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"time"
 
+	sharedvalidators "github.com/TudorEsan/shared-finance-app-golang/sharedValidators"
+
 	"github.com/gin-gonic/gin"
 	"github.com/hashicorp/go-hclog"
 	"go.mongodb.org/mongo-driver/bson"
@@ -116,5 +118,38 @@ func (controller *AuthController) LoginHandler() gin.HandlerFunc {
 
 		helpers.SetCookies(c, jwt, refreshToken)
 		c.JSON(http.StatusOK, foundUser)
+	}
+}
+
+func (controller *AuthController) RefreshTokensHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		refreshToken, err := c.Cookie("refreshToken")
+		if err != nil {
+			c.JSON(401, gin.H{"message": "Refresh Token not present"})
+			return
+		}
+
+		claims, err := sharedvalidators.ValidateToken(refreshToken)
+		if err != nil {
+			controller.l.Error("Invalid Refresh Token")
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid refresh token"})
+			return
+		}
+
+		user, err := helper.GetUser(controller.userCollection, claims.Id)
+		if err != nil {
+			controller.l.Error(err.Error())
+			c.JSON(http.StatusUnauthorized, gin.H{"message": err.Error()})
+			return
+		}
+
+		token, refreshToken, err := helper.GenerateTokens(user)
+		if err != nil {
+			controller.l.Error(err.Error())
+			c.JSON(http.StatusUnauthorized, gin.H{"message": err.Error()})
+			return
+		}
+		helper.SetCookies(c, token, refreshToken)
+		c.JSON(http.StatusOK, gin.H{"message": "success"})
 	}
 }

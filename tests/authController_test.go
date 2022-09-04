@@ -92,7 +92,6 @@ func TestAuthService(t *testing.T) {
 
 	t.Run("Signup with unvalid email", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		fmt.Println(1)
 		body := []byte(`{
 			"username": "tudoresan",
 			"password": "tudoresan",
@@ -105,7 +104,6 @@ func TestAuthService(t *testing.T) {
 
 	t.Run("Testing Signup when credentials are good", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		fmt.Println(2)
 		body := []byte(`{
 			"username": "tudoresan",
 			"password": "tudoresan",
@@ -122,7 +120,6 @@ func TestAuthService(t *testing.T) {
 
 	t.Run("Testing Login when credentials are good", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		fmt.Println(3)
 		body := []byte(`{
 			"username": "tudoresan",
 			"password": "tudoresan"
@@ -148,8 +145,5 @@ func TestAuthService(t *testing.T) {
 		router.ServeHTTP(w, req)
 		assert.Equal(t, 400, w.Code)
 	})
-}
-
-func TestLogin(t *testing.T) {
 
 }
